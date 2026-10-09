@@ -56,7 +56,7 @@ jobs:
       - name: Enforce minimum 80% test coverage
         run: pytest --cov=app --cov-fail-under=80 -q
 
-  deploy:
+    deploy:
     name: Deployment
     needs: quality
     # Deploy only from main, never from pull requests
@@ -67,6 +67,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - name: Set lowercase image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -77,4 +79,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ${{ env.IMAGE }}:latest
