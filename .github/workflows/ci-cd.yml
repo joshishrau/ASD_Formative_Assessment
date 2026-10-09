@@ -6,6 +6,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -56,7 +57,7 @@ jobs:
       - name: Enforce minimum 80% test coverage
         run: pytest --cov=app --cov-fail-under=80 -q
 
-    deploy:
+  deploy:
     name: Deployment
     needs: quality
     # Deploy only from main, never from pull requests
